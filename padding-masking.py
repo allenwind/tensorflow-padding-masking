@@ -1,6 +1,7 @@
 import itertools
 import numpy as np
 import tensorflow as tf
+from preprocessing import Word2IdTransformer
 
 def batch_padding(X, padding=0):
     maxlen = max([len(x) for x in X])
@@ -9,30 +10,6 @@ def batch_padding(X, padding=0):
         if len(x) < maxlen else x for x in X
     ])
     return padded_X
-
-class Word2IdTransformer:
-    """字转id"""
-
-    def __init__(self):
-        self.word2id = {}
-        self.UNKNOW = 1 # pad is 0
-
-    def fit(self, X):
-        vocab = set(itertools.chain(*X))
-        for i, w in enumerate(vocab, start=2):
-            self.word2id[w] = i
-
-    def transform(self, X):
-        r = []
-        for sample in X:
-            s = []
-            for w in sample:
-                s.append(self.word2id.get(w, self.UNKNOW))
-            r.append(s)
-        return r
-
-    def __len__(self):
-        return len(self.word2id) + 1
 
 ##### padding #####
 seqs = [
@@ -79,7 +56,7 @@ print(masked_output._keras_mask)
 # 4
 masking = tf.keras.layers.Masking(mask_value=0.0)
 unmasked_embedding = tf.cast(
-    tf.tile(tf.expand_dims(padded_X, axis=-1), [1, 1, 8]), tf.float32
+    tf.tile(tf.expand_dims(padded_X, axis=-1), [1, 1, 8]), tf.float32 # (batch_size, timesteps, features)
 )
 masked_embedding = masking(unmasked_embedding)
 print(masked_embedding._keras_mask)
