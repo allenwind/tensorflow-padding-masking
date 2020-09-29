@@ -60,3 +60,5 @@ unmasked_embedding = tf.cast(
 )
 masked_embedding = masking(unmasked_embedding)
 print(masked_embedding._keras_mask)
+
+# 5
