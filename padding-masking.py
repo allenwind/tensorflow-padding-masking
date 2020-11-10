@@ -23,14 +23,17 @@ wtrans.fit(seqs)
 X = wtrans.transform(seqs) # 转换为ID
 print(X)
 
+# 1
 padded_X = tf.keras.preprocessing.sequence.pad_sequences(
     X, padding="post"
 )
 print(padded_X)
 
-# or
+# 2
 print(batch_padding(X))
 
+# 3
+# tf.data的batch_pad方法
 
 ##### generate mask #####
 
@@ -62,3 +65,7 @@ masked_embedding = masking(unmasked_embedding)
 print(masked_embedding._keras_mask)
 
 # 5
+tf.greater
+
+# 6
+tf.math.logical_not(tf.math.equal(real, 0))

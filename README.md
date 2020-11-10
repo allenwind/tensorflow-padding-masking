@@ -1,3 +1,3 @@
 # tensorflow-padding-masking
 
-padding和masking的例子
+NLP中面对的数据是不定长的序列，padding和masking变得尤为重要，这里提供padding和masking的例子以及常用层的mask实现。

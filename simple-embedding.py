@@ -1,6 +1,8 @@
 import tensorflow as tf
 import numpy as np
 
+# Embedding计算序列mask
+
 class SimpleEmbedding(tf.keras.layers.Layer):
     def __init__(
         self, 
