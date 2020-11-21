@@ -65,7 +65,9 @@ masked_embedding = masking(unmasked_embedding)
 print(masked_embedding._keras_mask)
 
 # 5
-tf.greater
+mask = tf.greater(padded_X, 0)
+print(mask)
 
 # 6
-tf.math.logical_not(tf.math.equal(real, 0))
+mask = tf.math.logical_not(tf.math.equal(padded_X, 0))
+print(mask)
