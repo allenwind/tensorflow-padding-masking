@@ -94,6 +94,8 @@ class AttentionPooling1D(tf.keras.layers.Layer):
         return x
 
 class MaskBiLSTM(tf.keras.layers.Layer):
+    """支持mask的BiLSTM"""
+
     def __init__(self, hdims, **kwargs):
         super(MaskBiLSTM, self).__init__(**kwargs)
         self.hdims = hdims

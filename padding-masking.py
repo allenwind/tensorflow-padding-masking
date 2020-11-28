@@ -35,6 +35,21 @@ print(batch_padding(X))
 # 3
 # tf.data的batch_pad方法
 
+def gen():
+    for i in X:
+        yield i
+
+dl = tf.data.Dataset.from_generator(
+    generator=gen,
+    output_types=tf.int32
+).padded_batch(
+    batch_size=1,
+    padded_shapes=[10]
+)
+
+for i in iter(dl):
+    print(i.shape)
+
 ##### generate mask #####
 
 
