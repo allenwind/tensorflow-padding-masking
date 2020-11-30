@@ -1,6 +1,19 @@
 import tensorflow as tf
 from tensorflow.keras.layers import *
 
+class GlobalMasking(tf.keras.layers.Layer):
+    """生成全局的Masking"""
+
+    def __init__(self, **kwargs):
+        super(GlobalMasking, self).__init__(**kwargs)
+
+    def call(self, inputs):
+        mask = tf.not_equal(inputs, 0)
+        mask = tf.expand_dims(mask, axis=2)
+        # (batch_size, seq_len, 1)
+        mask = tf.cast(mask, tf.float32)
+        return mask
+
 class MaskGlobalAveragePooling1D(tf.keras.layers.Layer):
     
     def __init__(self, **kwargs):
@@ -108,7 +121,9 @@ class MaskBiLSTM(tf.keras.layers.Layer):
         x = tf.reverse_sequence(x, seq_len, seq_axis=1)
         return x
 
-    def call(self, inputs, mask):
+    def call(self, inputs, mask=None):
+        if mask is None:
+            mask = 1.0
         x = inputs
         x_forward = self.forward_lstm(x)
         x_backward = self.reverse_sequence(x, mask)
