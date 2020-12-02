@@ -77,14 +77,14 @@ class AttentionPooling1D(tf.keras.layers.Layer):
         self.k_dense = tf.keras.layers.Dense(
             units=self.h_dim,
             kernel_initializer=self.kernel_initializer,
-            #kernel_regularizer="l2",
+            # kernel_regularizer="l2",
             activation="tanh",
             use_bias=False,
         )
         self.o_dense = tf.keras.layers.Dense(
             units=1,
-            kernel_regularizer="l1", # 添加稀疏性
-            kernel_constraint=tf.keras.constraints.non_neg(), # 添加非负约束
+            # kernel_regularizer="l1", # 添加稀疏性
+            # kernel_constraint=tf.keras.constraints.non_neg(), # 添加非负约束
             use_bias=False
         )
 
@@ -135,3 +135,19 @@ class MaskBiLSTM(tf.keras.layers.Layer):
 
     def compute_output_shape(self, input_shape):
         return input_shape[0][:-1] + (self.hdims * 2,)
+
+class MaskConv1D(tf.keras.layers.Conv1D):
+    """支持mask的Conv1D"""
+
+    def __init__(self, **kwargs):
+        super(MaskConv1D, self).__init__(**kwargs)
+
+    def call(self, inputs, mask=None):
+        if mask is None:
+            mask = 1.0
+        else:
+            mask = mask = tf.expand_dims(tf.cast(mask, "float32"), -1)
+        x = inputs * mask
+        x = super(MaskConv1D, self).call(x)
+        return x
+
