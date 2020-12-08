@@ -23,6 +23,13 @@ wtrans.fit(seqs)
 X = wtrans.transform(seqs) # 转换为ID
 print(X)
 
+# 示例样本
+seqs = [
+  np.arange(1, 7),
+  np.arange(4, 11),
+  np.arange(1, 8),
+]
+
 # 1
 padded_X = tf.keras.preprocessing.sequence.pad_sequences(
     X, padding="post"
@@ -86,3 +93,9 @@ print(mask)
 # 6
 mask = tf.math.logical_not(tf.math.equal(padded_X, 0))
 print(mask)
+
+# 7
+mask_layer = tf.keras.layers.Masking(mask_value=0)
+X = tf.expand_dims(padded_X, axis=-1)
+mask_tensor = mask_layer.compute_mask(X)
+print(mask_tensor)
